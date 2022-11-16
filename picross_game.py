@@ -3,7 +3,10 @@ import numpy as np
 # likely will not use numpy for the player board as it 
 # will hold other data? OR could just represent ex. ? == 3 
 
+# TODO for players will need to convert from 0 indexed arrays to 1 indexed
+# TODO coordinates are also flipped from numpy representation to 2d graph
 
+# TODO eventually want to have save states
 class Board:
 
 
@@ -36,6 +39,22 @@ class Board:
             clues.append(rowcount_list)
         return clues
 
+    def update_guess(self, coordinates, guess):
+        # guess will be a 0 (blank) or 1 (square)
+
+        # TODO allow coordinates to be a list of points
+        self.player_board[coordinates[1]][coordinates[0]] = guess
+
+        # update visual in picross output
+        with open("picross_output.txt", "w") as a:
+            a.write(np.array2string(self.player_board))
+            a.write('\n')
+            a.write(str(self.xclues))
+            a.write('\n')
+            a.write(str(self.yclues))
+            a.close()
+
+
 
 
 # want multiple modes and settings
@@ -50,85 +69,31 @@ def main():
         a.write(str(board.xclues))
         a.write('\n')
         a.write(str(board.yclues))
+        a.close()
 
+    a = True
+    while a:
+        text = input("enter x, y: ")
+        # TODO do some input checking/cleaning (lowercase)
 
+        # exit statement
+        if text == "exit":
+            a = False
 
-
-def main1():
-    #execute game
-    # instantiate the board
-    #np.random.seed(42)
-    x = 10
-    y = 10
-    board = np.random.randint(low=0, high=2, size=(x,y))
-    
-
-
-    
-    xclues = []
-    yclues = []
-    
-    i = 0
-    j = 0
-
-    while i < x:
-        xcount = 0
-        xtemplist = []
-        while j < y:
-            if board[i][j] == 1:
-                xcount += 1
+        # creating the actual gameplay loop
+        
+        # TODO want input to include multiple coordinates at once
+        # turn input into coordinates
+        coordinate = text.partition(",")
+        if coordinate[0].isnumeric() and coordinate[2].isnumeric():
+            coordinate = [int(coordinate[0]), int(coordinate[2])]
+            
+            # check the coordinate is possible FLIPPED, ZERO INDEX
+            if coordinate[0] < board.y and coordinate[1] < board.x and coordinate[0] >= 0 and coordinate[1] >= 0:
+                print("You entered: {}, {}".format(coordinate[0], coordinate[1]))
+                board.update_guess(coordinate, 1)
             else:
-                if xcount > 0:
-                    xtemplist.append(xcount)
-                xcount = 0
-
-
-            j += 1
-        if xcount > 0: xtemplist.append(xcount)
-        xclues.append(xtemplist)
-        j = 0
-        i += 1
-
-    i = 0
-    j = 0
-
-    while i < x:
-        ycount = 0
-        ytemplist = []
-        while j < y:
-            if board[j][i] == 1:
-                ycount += 1
-            else:
-                if ycount > 0:
-                    ytemplist.append(ycount)
-                ycount = 0
-
-
-            j += 1
-        if ycount > 0: ytemplist.append(ycount)
-        yclues.append(ytemplist)
-        j = 0
-        i += 1
-
-
-    player_board = ["?" for each in np.arange(x*y)].reshape(x,y)
-    print(player_board)
-
-
-    with open("picross_output.txt", "w") as a:
-
-        a.write(np.array2string(board))
-        a.write('\n')
-        a.write(str(xclues))
-        a.write('\n')
-        a.write(str(yclues))
-
-
-
-
-    return
-
-
+                print("Impossible coordinates")
 
 
 
