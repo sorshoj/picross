@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+<body>
+
+    <script>
+            
+        var config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        var game = new Phaser.Game(config);
+        var x = 3;
+        var y = 3;
+        const Board = new Array(x*y);
+
+        function preload ()
+        {
+            this.load.image('square', 'square.png');
+            for (let i = 0; i < Board.length; i++){
+                Board[i] = Math.floor(Math.random() * 2);
+            }
+
+
+        }
+
+        function create ()
+        {
+            this.add.image(0,0, 'square').setOrigin(0,0);
+            this.add.image(100,0, 'square').setOrigin(0,0);
+            this.add.text(400, 500, "board:"+ Board.toString());
+        }
+
+        function update ()
+        {
+        }
+    </script>
+
+</body>
+</html>
