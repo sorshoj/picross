@@ -19,25 +19,55 @@
         };
 
         var game = new Phaser.Game(config);
-        var x = 3;
-        var y = 3;
+        const  square_length = 100;
+        const x = 3;
+        const y = 3;
         const Board = new Array(x*y);
 
         function preload ()
         {
             this.load.image('square', 'square.png');
+
             for (let i = 0; i < Board.length; i++){
                 Board[i] = Math.floor(Math.random() * 2);
             }
-
 
         }
 
         function create ()
         {
-            this.add.image(0,0, 'square').setOrigin(0,0);
-            this.add.image(100,0, 'square').setOrigin(0,0);
-            this.add.text(400, 500, "board:"+ Board.toString());
+            let start_x = 0
+            let start_y = 0
+            for (let i = 0; i < Board.length; i++) {
+
+                this.add.image(start_x, start_y, 'square').setOrigin(0,0);
+
+                start_x = (start_x + square_length) % (square_length*x);
+                if (start_x == 0){
+                    start_y = start_y + square_length;
+                }
+            }
+
+            this.add.text(50, 575, "board:"+ Board.toString());
+
+
+            this.input.on('pointerdown', function (pointer) {
+                if (pointer.leftButtonDown()) {
+                    let pointx = pointer.x;
+                    let pointy = pointer.y;
+
+                    let index = Math.trunc(pointy / square_length) * x + Math.trunc(pointx / square_length);
+
+                    console.log("Index: " + index);
+                    if (Board[index] == 1) {
+                        console.log("hit!")
+                    }
+
+                }
+
+            }, this);
+
+
         }
 
         function update ()
