@@ -55,18 +55,17 @@
                 var tent = this.add.image(start_x+margin, start_y+margin, 'square').setOrigin(0,0).setInteractive();
                 tent.setData('index', i);
                 tent.on('pointerdown', click);
-
                 start_x = (start_x + square_length) % mod_val;
                 if (start_x == 0){
                     start_y = start_y + square_length;
                 }
             }
-
             this.add.text(50, 575, "board:"+ Board.toString());
             this.add.text(50, 550, "x clues: " + xclues.toString());
             this.add.text(50, 525, "y clues: " + yclues.toString());
-
         }
+       
+        // TODO need to end game screen / lookout
 
         function update ()
         {
@@ -76,8 +75,13 @@
         function click (pointer)
         {
             if (Board[this.getData('index')] == 0) {
-                // red
-                this.setTint(0xff0000);
+                if (pointer.rightButtonDown()) {
+                    // grey
+                    this.setTint(0x828282);
+                } else {
+                    // red
+                    this.setTint(0xff0000);
+                }
             } else {
                 // green
                 this.setTint(0x05fa46);
