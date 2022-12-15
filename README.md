@@ -18,4 +18,4 @@ To Do
 - work on UI. clues, assets, etc
 - need a create an ending screen / end state. need to create the conditions for ending (i.e. every square is filled in or all squares have been found)
 - add buttons/options for refreshing, resetting board, etc.
-
+- change clue color, when completed

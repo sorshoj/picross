@@ -6,7 +6,31 @@
 <body>
 
     <script>
-            
+        
+        var endscene = new Phaser.Class({
+            Extends: Phaser.Scene,
+            initialize:
+            function endscene ()
+            {
+                Phaser.Scene.call(this, { key: 'endscene' });
+            },
+
+            preload: function ()
+            {
+                this.load.image('endscene', 'endscene.png');
+            },
+
+            create: function ()
+            {
+                this.add.image(100, 100, 'endscene').setOrigin(0,0);
+
+            }
+
+        });
+
+
+
+
         var config = {
             type: Phaser.AUTO,
             width: 800,
@@ -19,10 +43,13 @@
         };
 
         var game = new Phaser.Game(config);
-        const  square_length = 100;
+        const square_length = 100;
+        const margin = 100;
         const x = 4;
         const y = 4;
+        let count_squares = 0;
         const Board = new Array(x*y);
+        const player_board = new Array(x*y);
         const xclues = new Array();
         const yclues = new Array();
 
@@ -32,60 +59,98 @@
             this.load.image('green', 'green_square.png');
             this.load.image('red', 'red.png');
 
-
+            // game board generation - entirely random
             for (let i = 0; i < Board.length; i++){
-                Board[i] = Math.floor(Math.random() * 2);
+                let num = Math.floor(Math.random() * 2)
+                Board[i] = num;
+                player_board[i] = num;
+                count_squares += num;
             }
 
+            console.log(count_squares);
             generate_xclues();
             generate_yclues();
-
         }
 
         function create ()
         {
             let start_x = 0;
             let start_y = 0;
-            let margin = 100;
             let mod_val = (square_length*x);
 
             // turn images into interactive images, with data 0, 1 
 
             for (let i = 0; i < Board.length; i++) {
                 var tent = this.add.image(start_x+margin, start_y+margin, 'square').setOrigin(0,0).setInteractive();
+                
+
                 tent.setData('index', i);
+                tent.setData('found', 0);
                 tent.on('pointerdown', click);
+
                 start_x = (start_x + square_length) % mod_val;
                 if (start_x == 0){
                     start_y = start_y + square_length;
                 }
             }
-            this.add.text(50, 575, "board:"+ Board.toString());
-            this.add.text(50, 550, "x clues: " + xclues.toString());
-            this.add.text(50, 525, "y clues: " + yclues.toString());
+
+            console.log("board: " + Board.toString());
+
+            // add xclues to screen
+            let ypos = margin + square_length/2;
+            let xpos = margin / 3;
+            for (let i = 0; i < xclues.length; i++) {
+                this.add.text(xpos, ypos, "" + xclues[i]);
+                ypos += square_length;
+            }
+
+            // add yclues to screen
+            xpos = margin + square_length/2;
+            ypos = margin / 3;
+            for (let i = 0; i < yclues.length; i++) {
+                this.add.text(xpos, ypos, "" + yclues[i]);
+                xpos += square_length;
+            }
+
+
+            if (count_squares <= 0) {
+                this.add.text(650, 550, "COMPLETED");
+                
+                this.scene.pause();
+                this.scene.run('endscene');
+
+            }
         }
        
         // TODO need to end game screen / lookout
 
         function update ()
         {
-
+            
         }
 
         function click (pointer)
         {
-            if (Board[this.getData('index')] == 0) {
+            // TODO clicking twice on grey should remove the tint
+            let index = this.getData('index');
+            if (this.getData('found') == 0) {
                 if (pointer.rightButtonDown()) {
                     // grey
                     this.setTint(0x828282);
                 } else {
-                    // red
-                    this.setTint(0xff0000);
+                    if (Board[index] == 0) {
+                        // red
+                        this.setTint(0xff0000);
+                    } else {
+                        // green
+                        count_squares -= 1;
+                        this.setTint(0x05fa46);
+                    }
+                   this.setData('found', 1);
+                   player_board[index] = Math.abs(player_board[index]-1);
                 }
-            } else {
-                // green
-                this.setTint(0x05fa46);
             }
+
         }
 
         function generate_yclues ()
@@ -94,7 +159,6 @@
             let count = 0;
             let col = new Array();
             for (let i = 0; i < Board.length; i++) {
-
                 if (Board[index] == 1) {
                     count += 1;
                 } else {
@@ -115,10 +179,8 @@
                     count = 0;
                     index = index - Board.length + 1;
                 }
-
             }
             console.log(yclues);
-
         }
 
 
