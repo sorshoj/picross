@@ -6,6 +6,7 @@ Progress So Far
 - clue generation (the numbers on typically atop the picross board) 
 - [11/16] implemented very basic player input/output
 - [12/12] have changed to a web version, using javascript and phaser library. Created visual assets for board. reimplemented clue generation and board creation
+- [12/15] have implemented scenes and created an endscene & trigger
 
 
 To Do
@@ -19,3 +20,10 @@ To Do
 - need a create an ending screen / end state. need to create the conditions for ending (i.e. every square is filled in or all squares have been found)
 - add buttons/options for refreshing, resetting board, etc.
 - change clue color, when completed
+- implement autofill - when all the squares in a row/col are found it is auto filled in with gray
+- add an optional timer?
+
+### END CONDITIONS:
+all green squares have been found (green, not greyed)
+???
+accuracy stat?
