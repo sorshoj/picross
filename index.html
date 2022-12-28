@@ -6,17 +6,17 @@
 <body>
 
     <script>
-        // variable declaration
 
+        // variable declaration
         const square_length = 100;
         const margin = 100;
         const x = 3;
         const y = 3;
-        let count_squares = 0;
-        const Board = new Array(x*y);
-        const player_board = new Array(x*y);
-        const xclues = new Array();
-        const yclues = new Array();
+        var count_squares = 0;
+        var Board = new Array(x*y);
+        var player_board = new Array(x*y);
+        var xclues = new Array();
+        var yclues = new Array();
 
         class GameScene extends Phaser.Scene {
             constructor ()
@@ -29,7 +29,21 @@
                 this.load.image('square', 'square.png');
                 this.load.image('green', 'green_square.png');
                 this.load.image('red', 'red.png');
+                this.load.image('newgame', 'newgame.png');
+                this.load.image('restart', 'restart.png');
+                this.load.image('infobutton', 'info_button.png');
+                
+            }
 
+            create ()
+            {
+                // resetting all necessary variables (for regen/restart)
+                Board = new Array(x*y);
+                player_board = new Array(x*y);
+                xclues = new Array();
+                yclues = new Array();
+                count_squares = 0
+                
                 // game board generation - entirely random
                 for (let i = 0; i < Board.length; i++){
                     let num = Math.floor(Math.random() * 2)
@@ -39,11 +53,7 @@
                     count_squares += num;
                 }
                 generate_xclues();
-                generate_yclues();                 
-            }
-
-            create ()
-            {
+                generate_yclues(); 
 
                 let start_x = 0;
                 let start_y = 0;
@@ -82,13 +92,77 @@
                     xpos += square_length;
                 }
 
+
+                // restart button
+                let newgame_butt = this.add.image(350, 525, 'newgame').setOrigin(0,0).setInteractive();
+                newgame_butt.on('pointerdown', this.newgame, this);
+
+                let info_butt = this.add.image(700,500, 'infobutton').setOrigin(0,0).setInteractive();
+                info_butt.on('pointerdown', function (pointer) {
+                    this.scene.pause();
+                    this.scene.run('InfoScene');
+                }, this);
+
+                // end scene
                 this.input.on('pointerup', function (pointer) {
                     if (count_squares <= 0) {
                         this.scene.pause();
+                        newgame_butt.setVisible(0);
                         this.scene.run('EndScene');
                     }
                 }, this);
 
+            }
+
+            newgame ()
+            {
+                console.log('new game');
+                this.scene.restart();
+            }
+        }
+
+        class EndScene extends Phaser.Scene {
+            constructor ()
+            {
+                super('EndScene');
+            }
+            preload() 
+            {
+                this.load.image('endscene', 'endscene.png');                
+            }
+
+            create ()
+            {
+                this.add.image(100, 100, 'endscene').setOrigin(0,0).setAlpha(0.5);
+
+                // new game
+                let newgame_butt = this.add.image(500, 525, 'newgame').setOrigin(0,0).setInteractive();
+                newgame_butt.on('pointerdown', this.newgame, this);
+            }
+    
+            newgame ()
+            {
+                console.log('new game');
+                this.scene.start("GameScene");
+            }
+        }
+
+        class InfoScene extends Phaser.Scene {
+            constructor ()
+            {
+                super('InfoScene');
+            }
+            preload () {
+                this.load.image('info', 'info.png');
+            }
+            create () {
+                this.add.image(100, 100, 'info').setOrigin(0,0);
+                this.input.once('pointerdown', this.disappear, this);
+
+            }
+            disappear () {
+                this.scene.stop();
+                this.scene.resume("GameScene");
             }
         }
 
@@ -174,28 +248,12 @@
         }
 
 
-        class EndScene extends Phaser.Scene {
-            constructor ()
-            {
-                super('EndScene');
-            }
-            preload() 
-            {
-                this.load.image('endscene', 'endscene.png');                
-            }
-
-            create ()
-            {
-                this.add.image(100, 100, 'endscene').setOrigin(0,0).setAlpha(0.5);
-            }
-        }
-
         var config = {
             type: Phaser.AUTO,
             width: 800,
             height: 600,
             parent: 'phaser-example',
-            scene: [ GameScene, EndScene]
+            scene: [ GameScene, EndScene, InfoScene]
         };
 
         var game = new Phaser.Game(config);
