@@ -17,8 +17,10 @@
         var count_green = 0;
         var Board = new Array(x*y);
         var player_board = new Array(x*y);
-        var xclues = new Array();
-        var yclues = new Array();
+        // describe a row
+        var xclues = new Array(x);
+        // describe a column
+        var yclues = new Array(y);
 
         class GameScene extends Phaser.Scene {
             constructor ()
@@ -41,29 +43,60 @@
                 player_board = new Array(x*y);
                 xclues = new Array();
                 yclues = new Array();
-                count_squares = 0;
+                count_squares = 9;
                 count_hit_red = 0;
                 count_green = 0;
 
-
-                // game board generation - entirely random
-                for (let i = 0; i < Board.length; i++){
-                    let num = Math.floor(Math.random() * 2)
-                    
-
-
-
-
-
-
-                    Board[i] = 0;
-
-                }
-                count_green = count_squares;
-                generate_xclues();
-                generate_yclues(); 
+                this.boardgeneration();
+                //generate_xclues();
+                //generate_yclues();
                 
             }
+
+
+
+
+            boardgeneration () {
+                let one;
+                let two;
+                let one_clues;
+                let two_clues;
+                if (x >= y) {
+                    one = y;
+                    two = x;
+                    one_clues = yclues;
+                    two_clues = xclues;
+                } else {
+                    one = x;
+                    two = y;
+                    one_clues = xclues;
+                    two_clues = yclues;
+                }
+
+                let previous = [];
+
+                for (let i = 0; i < two; i++) {
+
+                    let each = [];
+                    // generate each row/col (shortest)
+                    for (let j = 0; j < one; j++) {
+                        let num = Math.random();
+                        each.push();
+
+                    }
+
+
+                }
+
+
+
+
+
+
+            }
+
+
+
 
             create ()
             {                
