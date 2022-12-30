@@ -50,9 +50,14 @@
                 for (let i = 0; i < Board.length; i++){
                     let num = Math.floor(Math.random() * 2)
                     
-                    Board[i] = num;
-                    player_board[i] = num;
-                    count_squares += num;
+
+
+
+
+
+
+                    Board[i] = 1;
+
                 }
                 count_green = count_squares;
                 generate_xclues();
@@ -236,12 +241,17 @@
 
         function click (pointer)
         {
-            // TODO clicking twice on grey should remove the tint
             let index = this.getData('index');
             if (this.getData('found') == 0) {
                 if (pointer.rightButtonDown()) {
-                    // grey
-                    this.setTint(0x828282);
+                    
+                    if(this.isTinted) {
+                        // remove tint
+                        this.clearTint();
+                    } else {
+                        // grey
+                        this.setTint(0x828282);
+                    }
                 } else {
                     if (Board[index] == 0) {
                         // red
