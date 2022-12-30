@@ -13,6 +13,8 @@
         const x = 3;
         const y = 3;
         var count_squares = 0;
+        var count_hit_red = 0;
+        var count_green = 0;
         var Board = new Array(x*y);
         var player_board = new Array(x*y);
         var xclues = new Array();
@@ -32,18 +34,18 @@
                 this.load.image('newgame', 'newgame.png');
                 this.load.image('restart', 'restart.png');
                 this.load.image('infobutton', 'info_button.png');
-                
-            }
+                console.log('hit the preload');
 
-            create ()
-            {
                 // resetting all necessary variables (for regen/restart)
                 Board = new Array(x*y);
                 player_board = new Array(x*y);
                 xclues = new Array();
                 yclues = new Array();
-                count_squares = 0
-                
+                count_squares = 0;
+                count_hit_red = 0;
+                count_green = 0;
+
+
                 // game board generation - entirely random
                 for (let i = 0; i < Board.length; i++){
                     let num = Math.floor(Math.random() * 2)
@@ -52,9 +54,14 @@
                     player_board[i] = num;
                     count_squares += num;
                 }
+                count_green = count_squares;
                 generate_xclues();
                 generate_yclues(); 
+                
+            }
 
+            create ()
+            {                
                 let start_x = 0;
                 let start_y = 0;
                 let mod_val = (square_length*x);
@@ -135,9 +142,12 @@
             {
                 this.add.image(100, 100, 'endscene').setOrigin(0,0).setAlpha(0.5);
 
-                // new game
+                // new game button
                 let newgame_butt = this.add.image(500, 525, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
+                
+                // add accuracy statistic aat end of game
+                this.add.text(200, 550, "Accuracy: " + Math.round(count_green/(count_hit_red+count_green)*10000)/100 + "%");
             }
     
             newgame ()
@@ -235,6 +245,7 @@
                 } else {
                     if (Board[index] == 0) {
                         // red
+                        count_hit_red += 1;
                         this.setTint(0xff0000);
                     } else {
                         // green
