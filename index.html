@@ -10,12 +10,12 @@
         // variable declaration
         const square_length = 100;
         const margin = 100;
-        const x = 3;
+        const x = 4;
         const y = 3;
         var count_squares = 0;
         var count_hit_red = 0;
         var count_green = 0;
-        var Board = new Array(x*y);
+        var Board = new Array(x);
         var player_board = new Array(x*y);
         // describe a row
         var xclues = new Array(x);
@@ -39,60 +39,66 @@
                 console.log('hit the preload');
 
                 // resetting all necessary variables (for regen/restart)
-                Board = new Array(x*y);
+                //Board = new Array(x);
+                //Board.fill([]);
                 player_board = new Array(x*y);
                 xclues = new Array();
                 yclues = new Array();
-                count_squares = 9;
+                count_squares = 100;
                 count_hit_red = 0;
                 count_green = 0;
 
-                this.boardgeneration();
+                this.boardgeneration1();
                 //generate_xclues();
                 //generate_yclues();
                 
             }
 
 
-
-
             boardgeneration () {
-                let one;
-                let two;
-                let one_clues;
-                let two_clues;
-                if (x >= y) {
-                    one = y;
-                    two = x;
-                    one_clues = yclues;
-                    two_clues = xclues;
-                } else {
-                    one = x;
-                    two = y;
-                    one_clues = xclues;
-                    two_clues = yclues;
+                Board = new Array(x*y);
+                for (let i = 0; i < x*y; i++) {
+                    let num = Math.floor(Math.random() * 2);
+                    Board[i] = num;
+
+                }
+
+                console.log(Board.toString());
+            }
+
+            boardgeneration1 () {
+
+                yclues = new Array(y);
+                xclues = new Array(x);
+                Board = new Array(x);
+
+                //yclues.fill([]);
+                //xclues.fill([]);
+
+                for (let i = 0; i < x; i++) {
+                    Board[i] = [];
                 }
 
                 let previous = [];
 
-                for (let i = 0; i < two; i++) {
+                for (let i = 0; i < x; i++) {
 
-                    let each = [];
-                    // generate each row/col (shortest)
-                    for (let j = 0; j < one; j++) {
-                        let num = Math.random();
-                        each.push();
+
+                    let each = [y];
+                    for (let j = 0; j < y; j++) {
+                        
+                        let num = Math.floor(Math.random() * 2);
+
+                        console.log(i + " " + j + " " + num);
+                        Board[i][j] = num;
+                        each[j] = num;
 
                     }
 
-
+                    console.log('each: ' + each.toString());
                 }
 
-
-
-
-
-
+                console.log(Board);
             }
 
 
@@ -119,7 +125,7 @@
                     }
                 }
 
-                console.log("board: " + Board.toString());
+                //console.log("board: " + Board.toString());
 
                 // add xclues to screen
                 let ypos = margin + square_length/2;
