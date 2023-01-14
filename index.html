@@ -10,7 +10,7 @@
         // variable declaration
         const square_length = 100;
         const margin = 100;
-        const x = 4;
+        const x = 3;
         const y = 3;
         var count_squares = 0;
         var count_hit_red = 0;
@@ -48,60 +48,112 @@
                 count_hit_red = 0;
                 count_green = 0;
 
-                this.boardgeneration1();
+                let a = this.boardgeneration(x, y);
+                xclues = a[0];
+                yclues = a[1];
+                Board = a[2];
+                
                 //generate_xclues();
                 //generate_yclues();
                 
             }
 
 
-            boardgeneration () {
+            boardgeneration1 () {
                 Board = new Array(x*y);
                 for (let i = 0; i < x*y; i++) {
                     let num = Math.floor(Math.random() * 2);
                     Board[i] = num;
-
                 }
-
                 console.log(Board.toString());
             }
 
-            boardgeneration1 () {
+            boardgeneration (x, y) {
 
-                yclues = new Array(y);
-                xclues = new Array(x);
-                Board = new Array(x);
+                let temp_yclues = new Array(y);
+                let temp_xclues = new Array(x);
+                let temp_board = new Array((x*y));
 
-                //yclues.fill([]);
-                //xclues.fill([]);
-
+                // fill for edge cases
+                for (let i = 0; i < y; i++) {
+                    temp_yclues[i] = [0];
+                }
                 for (let i = 0; i < x; i++) {
-                    Board[i] = [];
+                    temp_xclues[i] = [0];
                 }
 
-                let previous = [];
+
+                let previous_row = []
 
                 for (let i = 0; i < x; i++) {
 
-
-                    let each = [y];
+                    let current_row = [];
                     for (let j = 0; j < y; j++) {
                         
+                        // NUMBER SELECTION
                         let num = Math.floor(Math.random() * 2);
 
-                        console.log(i + " " + j + " " + num);
-                        Board[i][j] = num;
-                        each[j] = num;
+                        temp_board[(i*x)+j] = num;
+                        current_row.push(num);
 
+                        // CLUE LOGIC
+                        if (num == 1) {
+
+                            // 1. if temp_xclues[i] has a 0 (AKA empty)
+                            // 2. if this is first val in current_row
+                            // 3. if the prev val in current_row is 1
+                            // 4. else push 1 to temp_xclues
+
+                            let x_index = current_row.length - 1;
+
+                            if (temp_xclues[i][0] == 0) {
+                                temp_xclues[i][0] = 1;
+                            } 
+                            else if (x_index == 0) {
+                                temp_xclues[i].push(1);
+                            } 
+                            else if (current_row[x_index-1] == 1) {                    
+                                let xclues_index = temp_xclues[i].length - 1;
+                                let x_clue = temp_xclues[i][xclues_index] + 1;
+                                temp_xclues[i][xclues_index] = x_clue;
+                            } 
+                            else {
+                                temp_xclues[i].push(1);
+                            }
+
+
+                            // 1. if temp_yclues[i] has a 0 (AKA empty)
+                            // 2. if previous_row[j] is 1 & temp_yclues not empty
+                            // 3. else push 1 to temp_yclues
+
+                            if (temp_yclues[j][0] == 0) {
+                                temp_yclues[j][0] = 1;
+                            }
+                            else if (previous_row[j] == 1 && temp_yclues[j].length != 0) {
+                                let yclues_index = temp_yclues[j].length - 1;
+                                let y_clue = temp_yclues[j][yclues_index] + 1;
+                                temp_yclues[j][yclues_index] = y_clue;
+                            } 
+                            else {
+                                temp_yclues[j].push(1);
+                            }
+                        }
                     }
 
-                    console.log('each: ' + each.toString());
+                    previous_row = current_row;
+
                 }
 
-                console.log(Board);
+                console.log(temp_board.toString());
+
+                // TODO what other assertions can be made?
+
+                // ASSERTIONS
+                console.assert(temp_yclues.length == y, "y clues are an incorrect length");
+                console.assert(temp_xclues.length == x, "x clues are an incorrect length");
+
+                return [temp_xclues, temp_yclues, temp_board];
             }
-
-
 
 
             create ()
