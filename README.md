@@ -8,10 +8,12 @@ Progress So Far
 - [12/12] have changed to a web version, using javascript and phaser library. Created visual assets for board. reimplemented clue generation and board creation
 - [12/15] have implemented scenes and created an endscene & trigger
 - [12/29] added an information scene w/ rules about the game
+- [1/19] changed board generation algorithm. progress in making entire doc more in line w/ JS best practices
 
 
 To Do
 - make it pretty
+- use this.registry to share info inbetween scenes 
 - add settings to change board size
 - add buttons/options for refreshing, resetting board, etc.
 - implement autofill - when all the squares in a row/col are found it is auto filled in with gray
@@ -36,4 +38,5 @@ COMPLETED
 all green squares have been found (green, not greyed)
 ???
 accuracy stat?
+
 
