@@ -12,11 +12,11 @@ Progress So Far
 
 
 To Do
+- edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
 - make it pretty
 - use this.registry to share info inbetween scenes 
 - add settings to change board size
 - add buttons/options for refreshing, resetting board, etc.
-- implement autofill - when all the squares in a row/col are found it is auto filled in with gray
 - add an optional timer
 - add end of game statistics
 - decide on the rules 
@@ -29,6 +29,7 @@ ISSUES
 
 
 COMPLETED
+- implement autofill - when all the squares in a row/col are found it is auto filled in with gray COMPLETED [1/19]
 - change clue color, when completed COMPLETED
 - need a create an ending screen / end state. need to create the conditions for ending (i.e. every square is filled in or all squares have been found) COMPLETED [12/29]
 - [11/16] want to find a better solution. numpy arrays clash with player intuitive indexing. [12/12] using different language, no longer issue

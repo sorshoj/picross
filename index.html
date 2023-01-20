@@ -40,7 +40,6 @@
                 this.board_green = a[3];
                 
                 this.player_green = 0;
-
                 this.player_board = new Array(this.x*this.y);
             }
 
@@ -204,6 +203,7 @@
                 let newgame_butt = this.add.image(350, 525, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
 
+                // info button
                 let info_butt = this.add.image(700,500, 'infobutton').setOrigin(0,0).setInteractive();
                 info_butt.on('pointerdown', function (pointer) {
                     this.scene.pause();
@@ -236,6 +236,54 @@
                     }
                 }, this);
 
+                // clue helper algo
+                // TODO make optional in settings
+                this.input.on('pointerdown', function() {
+                    // check rows
+                    for (let i = 0; i < this.x; i++) {
+                        let all_green = 0;
+                        let found_green = 0;
+                        for (let j = 0; j < this.y; j++) {
+                            if (this.Board[i*this.x + j] == 1) {
+                                all_green += 1;
+                                if (this.player_board[i*this.x + j].getData('found') == 1){
+                                    found_green += 1;
+                                }
+                            }
+                        }
+                        // all green in row has been found
+                        if (all_green == found_green) {
+                            for (let j = 0; j < this.y; j++) {
+                                if (this.player_board[i*this.x+j].getData('found') == 0){
+                                    this.player_board[i*this.x+j].setTint(0x828282);
+                                }
+                            }
+                        }
+                    }
+
+                    // check columns
+                    for (let j = 0; j < this.y; j++) {
+                        let all_green = 0;
+                        let found_green = 0;
+                        for (let i = 0; i < this.x; i++) {
+                            if (this.Board[i*this.x + j] == 1) {
+                                all_green += 1;
+                                if (this.player_board[i*this.x + j].getData('found') == 1){
+                                    found_green += 1;
+                                }
+                            }
+                        }
+                        // all green in row has been found
+                        if (all_green == found_green) {
+                            for (let i = 0; i < this.x; i++) {
+                                if (this.player_board[i*this.x+j].getData('found') == 0){
+                                    this.player_board[i*this.x+j].setTint(0x828282);
+                                }
+                            }
+                        }
+                    }
+
+                }, this);
 
             }
 
@@ -270,7 +318,6 @@
                 let board_green = this.registry.get('board_green');
                 let player_red = this.registry.get('player_red');
                 this.add.text(200, 550, "Accuracy: " + Math.round(board_green/(player_red+board_green)*10000)/100 + "%");
-                //this.add.text(200, 550, "Accuracy: " + Math.round(count_green/(count_hit_red+count_green)*10000)/100 + "%");
             }
     
             newgame ()
