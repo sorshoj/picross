@@ -29,6 +29,7 @@ ISSUES
 
 
 COMPLETED
+- fix y clues for large boards. clues are unreadable at 10x10 COMPLETED [1/24]
 - implement autofill - when all the squares in a row/col are found it is auto filled in with gray COMPLETED [1/19]
 - change clue color, when completed COMPLETED
 - need a create an ending screen / end state. need to create the conditions for ending (i.e. every square is filled in or all squares have been found) COMPLETED [12/29]

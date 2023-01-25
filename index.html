@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<title>picross</title>
+
 <head>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
 </head>
@@ -21,7 +23,8 @@
             {
                 // TODO move these loads to a different scene
                 // these are reloaded every new game
-                this.load.image('square', 'square.png');GameScene
+                //this.load.image('square', 'square.png');
+                this.load.image('square', 'square_v2.png');
                 this.load.image('green', 'green_square.png');
                 this.load.image('red', 'red.png');
                 this.load.image('newgame', 'newgame.png');
@@ -31,8 +34,8 @@
 
 
                 // RESET VARIABLES FOR NEW GAME
-                this.x = 4;
-                this.y = 4;
+                this.x = 10;
+                this.y = 10;
                 let a = this.boardgeneration(this.x, this.y);
                 this.xclues = a[0];
                 this.yclues = a[1];
@@ -136,8 +139,8 @@
             {                
                 let start_x = 0;
                 let start_y = 0;
-                let square_length = 100;
-                let margin = 100;
+                let square_length = 50;
+                let margin = 150;
                 let x = this.x;
                 let y = this.y;
                 let mod_val = (square_length*x);
@@ -192,19 +195,22 @@
 
                 // add yclues to screen
                 xpos = margin + square_length/2;
-                ypos = margin / 3;
                 for (let i = 0; i < this.yclues.length; i++) {
-                    this.add.text(xpos, ypos, "" + this.yclues[i]);
+                    ypos = margin / 3;
+                    for (let j = 0; j < this.yclues[i].length; j++){
+                        this.add.text(xpos, ypos, "" + this.yclues[i][j]);
+                        ypos+=20;
+                    }
                     xpos += square_length;
                 }
 
 
                 // restart button
-                let newgame_butt = this.add.image(350, 525, 'newgame').setOrigin(0,0).setInteractive();
+                let newgame_butt = this.add.image(config.width/2, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
 
                 // info button
-                let info_butt = this.add.image(700,500, 'infobutton').setOrigin(0,0).setInteractive();
+                let info_butt = this.add.image(config.width-100,config.height-100, 'infobutton').setOrigin(0,0).setInteractive();
                 info_butt.on('pointerdown', function (pointer) {
                     this.scene.pause();
                     this.scene.run('InfoScene');
@@ -311,13 +317,13 @@
                 this.add.image(100, 100, 'endscene').setOrigin(0,0).setAlpha(0.5);
 
                 // new game button
-                let newgame_butt = this.add.image(500, 525, 'newgame').setOrigin(0,0).setInteractive();
+                let newgame_butt = this.add.image(config.width/2, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
                 
                 // add accuracy statistic aat end of game
                 let board_green = this.registry.get('board_green');
                 let player_red = this.registry.get('player_red');
-                this.add.text(200, 550, "Accuracy: " + Math.round(board_green/(player_red+board_green)*10000)/100 + "%");
+                this.add.text(200, config.height-50, "Accuracy: " + Math.round(board_green/(player_red+board_green)*10000)/100 + "%");
             }
     
             newgame ()
@@ -349,8 +355,8 @@
 
         var config = {
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
+            width: 1000,
+            height: 800,
             parent: 'phaser-example',
             scene: [ GameScene, EndScene, InfoScene]
         };
