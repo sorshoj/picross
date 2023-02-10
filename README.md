@@ -9,11 +9,11 @@ Progress So Far
 - [12/15] have implemented scenes and created an endscene & trigger
 - [12/29] added an information scene w/ rules about the game
 - [1/19] changed board generation algorithm. progress in making entire doc more in line w/ JS best practices
-
+- [2/8] now hosting this project on Digital Ocean as a static page
+- [2/9] changed the visual assets
 
 To Do
 - edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
-- make it pretty
 - use this.registry to share info inbetween scenes 
 - add settings to change board size
 - add buttons/options for refreshing, resetting board, etc.
@@ -29,6 +29,7 @@ ISSUES
 
 
 COMPLETED
+- make it pretty
 - fix y clues for large boards. clues are unreadable at 10x10 COMPLETED [1/24]
 - implement autofill - when all the squares in a row/col are found it is auto filled in with gray COMPLETED [1/19]
 - change clue color, when completed COMPLETED
