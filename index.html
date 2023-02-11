@@ -30,7 +30,6 @@
                 this.load.image('infobutton', 'assets/info_button_v2.png');
                 console.log('hit the preload');
 
-
                 // RESET VARIABLES FOR NEW GAME
                 this.x = 10;
                 this.y = 10;
@@ -42,6 +41,9 @@
                 
                 this.player_green = 0;
                 this.player_board = new Array(this.x*this.y);
+
+                this.graphics = this.add.graphics();
+                this.graphics.setDepth(100);
             }
 
             // returns yclues, xclues, board array, and board_green
@@ -203,6 +205,12 @@
                 }
 
 
+                this.draw_guidelines();
+                this.guideline_butt = this.add.image(750,255, 'square').setOrigin(0,0).setInteractive();
+                this.guideline_butt.setTint(0x1023ED);
+                this.add.text(805, 275, 'Toggle Guidelines');
+                this.guideline_butt.on('pointerdown', this.guidelines, this);
+
                 // restart button
                 let newgame_butt = this.add.image(config.width/2, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
@@ -215,7 +223,7 @@
                 }, this);
 
 
-                // end scene
+                // end scene button
                 this.input.on('pointerdown', function() {
 
                     // count the number of found green squares & compare
@@ -240,7 +248,7 @@
                     }
                 }, this);
 
-                // clue helper algo
+                // clue helper algo (auto greys out when row/col completes)
                 // TODO make optional in settings
                 this.input.on('pointerdown', function() {
                     // check rows
@@ -295,6 +303,41 @@
             {
                 console.log('new game');
                 this.scene.restart();
+                return;
+            }
+
+            // listener function to toggle guidelines visibility
+            guidelines() 
+            {   
+                if (!this.registry.has('guidelines')) {
+                    this.registry.set('guidelines', 1);
+                }
+                if (this.registry.get('guidelines') == 0) {
+                    this.registry.set('guidelines', 1);
+                    this.graphics.setAlpha(1.0);
+                    this.guideline_butt.setTint(0x1023ED);
+
+                } else {
+                    this.registry.set('guidelines', 0);
+                    this.graphics.setAlpha(0.0);
+                    this.guideline_butt.clearTint();
+                }
+                return;
+            }
+
+            // draws guidelines
+            draw_guidelines ()
+            {
+                let square_length = 50;
+                let margin = 150;
+
+                this.graphics.lineStyle(3, 0x1023ED, 1.0);
+
+                this.graphics.beginPath();
+                this.graphics.lineBetween(margin+(square_length*this.x/2), margin-5,margin+(square_length*this.x/2), margin+(square_length*this.y)+5)
+                this.graphics.lineBetween(margin-5, margin+(square_length*this.y/2), margin+(square_length*this.x)+5, margin+(square_length*this.y/2));
+                this.graphics.closePath();
+                this.graphics.strokePath();
                 return;
             }
 
