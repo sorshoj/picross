@@ -146,6 +146,7 @@
                 let mod_val = (square_length*x);
 
                 // create interactive image array
+                // & click function
                 for (let i = 0; i < this.Board.length; i++) {
                     let tent = this.add.image(start_x+margin, start_y+margin, 'square').setOrigin(0,0).setInteractive();
                     
@@ -205,6 +206,7 @@
                 }
 
 
+                // draw guidelines
                 this.draw_guidelines();
                 this.guideline_butt = this.add.image(750,255, 'square').setOrigin(0,0).setInteractive();
                 this.guideline_butt.setTint(0x1023ED);
