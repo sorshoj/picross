@@ -33,11 +33,14 @@
                 // RESET VARIABLES FOR NEW GAME
                 this.x = 10;
                 this.y = 10;
+                this.margin = 150;
+                this.square_length = 50;
                 let a = this.boardgeneration(this.x, this.y);
                 this.xclues = a[0];
                 this.yclues = a[1];
                 this.Board = a[2];
                 this.board_green = a[3];
+                this.registry.set('lastSquare', -1);
                 
                 this.player_green = 0;
                 this.player_board = new Array(this.x*this.y);
@@ -139,8 +142,8 @@
             {                
                 let start_x = 0;
                 let start_y = 0;
-                let square_length = 50;
-                let margin = 150;
+                let square_length = this.square_length;
+                let margin = this.margin;
                 let x = this.x;
                 let y = this.y;
                 let mod_val = (square_length*x);
@@ -153,38 +156,75 @@
                     tent.setData('index', i);
                     tent.setData('board', this.Board[i]);
                     tent.setData('found', 0);
-
-                    tent.on('pointerdown', function(pointer) {
-                        let index = this.getData('index');
-                        let board = this.getData('board');
-                        if (this.getData('found') == 0) {
-                            if (pointer.rightButtonDown()) {
-                                if(this.isTinted) {
-                                    // remove tint
-                                    this.clearTint();
-                                } else {
-                                    // grey
-                                    this.setTint(0x828282);
-                                }
-                            } else {
-                                if (board == 0) {
-                                    // red
-                                    this.setTint(0xff0000);
-                                } else {
-                                    // green
-                                    this.setTint(0x05fa46);
-                                }
-                               this.setData('found', 1);
-                            }
-                        }
-                    });
-
+    
                     this.player_board[i] = tent;
                     start_x = (start_x + square_length) % mod_val;
                     if (start_x == 0){
                         start_y = start_y + square_length;
                     }
+
                 }
+
+
+                // PLAYER INPUT
+                //this.input.on('pointerdown', this.player_input, this);
+                this.input.on('pointerdown', function(pointer, currentlyOver) {
+                    
+                    if (currentlyOver.length == 0) {
+                        this.registry.set('lastSquare', -1);
+
+                    } else {
+                        let index1 = currentlyOver[0].getData('index')
+                        this.registry.set('lastSquare', index1);
+                    }
+                }, this);
+
+                this.input.on('pointerup', function(pointer, currentlyOver) {
+                    if (currentlyOver.length == 0) {
+                        return;
+                    }
+                    let currSquare = currentlyOver[0].getData('index')
+                    let lastSquare = this.registry.get('lastSquare');
+
+                    // case : same square ? 
+
+                    if (lastSquare >= 0){
+                        // either the same row
+                        if (Math.abs(lastSquare-currSquare) <= 9){
+                            // check if the same row
+
+                            if (Math.floor(lastSquare/this.x) == Math.floor(currSquare/this.x)){
+                                console.log("SAME ROW");
+
+                                let squares = [];
+                                for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i++){
+                                    squares.push(i);
+                                }
+                                this.setAllTint(squares, pointer.rightButtonDown());
+                            }
+                        }
+                        // or the same column
+                        else if (lastSquare%this.y == currSquare%this.y) {
+                            console.log("SAME COL");
+                            //console.log(lastSquare, currSquare);
+
+                            let squares = []
+                            for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i+=this.x){
+
+                                squares.push(i);
+                            }
+
+                            this.setAllTint(squares, pointer.rightButtonDown());
+                        }
+                        else {
+                            console.log("NO MATCH");
+                        }
+
+                    }
+
+
+                }, this);
+
 
                 // add xclues to screen
                 let ypos = margin + square_length/2;
@@ -206,17 +246,68 @@
                 }
 
 
-                // draw guidelines
                 this.draw_guidelines();
                 this.guideline_butt = this.add.image(750,255, 'square').setOrigin(0,0).setInteractive();
                 this.guideline_butt.setTint(0x1023ED);
                 this.add.text(805, 275, 'Toggle Guidelines');
                 this.guideline_butt.on('pointerdown', this.guidelines, this);
 
+
                 // restart button
                 let newgame_butt = this.add.image(config.width/2, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
+                
+                // clue helper algo (auto greys out when row/col completes)
+                // TODO make optional in settings
+                this.input.on('pointerup', function() {
+                    // check rows
+                    for (let i = 0; i < this.x; i++) {
+                        let all_green = 0;
+                        let found_green = 0;
+                        for (let j = 0; j < this.y; j++) {
+                            if (this.Board[i*this.x + j] == 1) {
+                                all_green += 1;
+                                if (this.player_board[i*this.x + j].getData('found') == 1){
+                                    found_green += 1;
+                                }
+                            }
+                        }
+                        // all green in row has been found
+                        if (all_green == found_green) {
+                            for (let j = 0; j < this.y; j++) {
+                                if (this.player_board[i*this.x+j].getData('found') == 0){
+                                    this.player_board[i*this.x+j].setTint(0x828282);
+                                    this.player_board[i*this.x+j].setData('found', 1);
+                                }
+                            }
+                        }
+                    }
 
+                    // check columns
+                    for (let j = 0; j < this.y; j++) {
+                        let all_green = 0;
+                        let found_green = 0;
+                        for (let i = 0; i < this.x; i++) {
+                            if (this.Board[i*this.x + j] == 1) {
+                                all_green += 1;
+                                if (this.player_board[i*this.x + j].getData('found') == 1){
+                                    found_green += 1;
+                                }
+                            }
+                        }
+                        // all green in row has been found
+                        if (all_green == found_green) {
+                            for (let i = 0; i < this.x; i++) {
+                                if (this.player_board[i*this.x+j].getData('found') == 0){
+                                    this.player_board[i*this.x+j].setTint(0x828282);
+                                    this.player_board[i*this.x+j].setData('found', 1);                                    
+                                }
+                            }
+                        }
+                    }
+
+                }, this);  
+                
                 // info button
                 let info_butt = this.add.image(config.width-100,config.height-100, 'infobutton').setOrigin(0,0).setInteractive();
                 info_butt.on('pointerdown', function (pointer) {
@@ -250,54 +341,6 @@
                     }
                 }, this);
 
-                // clue helper algo (auto greys out when row/col completes)
-                // TODO make optional in settings
-                this.input.on('pointerdown', function() {
-                    // check rows
-                    for (let i = 0; i < this.x; i++) {
-                        let all_green = 0;
-                        let found_green = 0;
-                        for (let j = 0; j < this.y; j++) {
-                            if (this.Board[i*this.x + j] == 1) {
-                                all_green += 1;
-                                if (this.player_board[i*this.x + j].getData('found') == 1){
-                                    found_green += 1;
-                                }
-                            }
-                        }
-                        // all green in row has been found
-                        if (all_green == found_green) {
-                            for (let j = 0; j < this.y; j++) {
-                                if (this.player_board[i*this.x+j].getData('found') == 0){
-                                    this.player_board[i*this.x+j].setTint(0x828282);
-                                }
-                            }
-                        }
-                    }
-
-                    // check columns
-                    for (let j = 0; j < this.y; j++) {
-                        let all_green = 0;
-                        let found_green = 0;
-                        for (let i = 0; i < this.x; i++) {
-                            if (this.Board[i*this.x + j] == 1) {
-                                all_green += 1;
-                                if (this.player_board[i*this.x + j].getData('found') == 1){
-                                    found_green += 1;
-                                }
-                            }
-                        }
-                        // all green in row has been found
-                        if (all_green == found_green) {
-                            for (let i = 0; i < this.x; i++) {
-                                if (this.player_board[i*this.x+j].getData('found') == 0){
-                                    this.player_board[i*this.x+j].setTint(0x828282);
-                                }
-                            }
-                        }
-                    }
-
-                }, this);
 
             }
 
@@ -306,6 +349,82 @@
                 console.log('new game');
                 this.scene.restart();
                 return;
+            }
+
+            setAllTint(squares, isGrey)
+            {
+                for (let i = 0; i < squares.length; i++) {
+                    let currSquare = this.player_board[squares[i]];
+                    console.log(currSquare.getData('index'));
+
+                    if (currSquare.getData('found') == 0) {
+                        if (isGrey) {
+                            if (currSquare.isTinted) {
+                                currSquare.clearTint();
+                            } else {
+                                // grey
+                                currSquare.setTint(0x828282);
+                            }
+                        } else {
+                            if (currSquare.getData('board') == 1) {
+                                // green
+                                currSquare.setTint(0x05fa46)
+                            } else {
+                                // red
+                                currSquare.setTint(0xff0000);
+                            }
+                            currSquare.setData('found', 1);
+                        }
+                    }
+                }
+            }
+
+            // listener for player input
+            player_input(pointer, currentlyOver)
+            {
+                let margin = this.margin;
+                let square_length = this.square_length;
+                let x = this.x;
+                let y = this.y;
+                let tempx = Math.floor((pointer.x - margin) / square_length);
+                let tempy = Math.floor((pointer.y - margin) / square_length);
+                
+                //console.log(currentlyOver);
+
+                if ((pointer.x > margin & pointer.x < (margin+x*square_length)) & (pointer.y > margin & pointer.y < (margin+y*square_length))){
+                    
+                    //need to catch and limit pointer to only the board
+                    let temp_index = tempx + tempy*y;
+
+                    //console.log(temp_index);
+                    let current_sq = this.player_board[temp_index]
+                    let board = current_sq.getData('board');
+
+
+                    if (current_sq.getData('found') == 0) {
+                        console.log('FOUND')
+                        if (pointer.leftButtonDown()) {
+                            if (board == 0) {
+                                // red
+                                current_sq.setTint(0xff0000);
+                            } else {
+                                // green
+                                current_sq.setTint(0x05fa46);
+                            }
+                            current_sq.setData('found', 1);                              
+                        } else {
+                            if(current_sq.isTinted) {
+                                // remove tint
+                                current_sq.clearTint();
+                            } else {
+                                // grey
+                                current_sq.setTint(0x828282);
+                            }                                
+                        }
+                    }                                     
+                } else {
+                    console.log('out of bounds');                        
+                }
             }
 
             // listener function to toggle guidelines visibility
