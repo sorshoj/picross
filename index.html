@@ -31,6 +31,7 @@
                 this.load.image('newgame', 'assets/newgame_v2.png');
                 this.load.image('infobutton', 'assets/info_button_v2.png');
                 console.log('hit the preload');
+                this.load.image('select', 'assets/temp.png');
 
                 // RESET VARIABLES FOR NEW GAME
                 this.x = 10;
@@ -97,7 +98,6 @@
                 }, this);
 
 
-
                 // TODO can make this more efficient
                 this.input.on('pointerup', function(pointer, currentlyOver) {
                     if (currentlyOver.length == 0) {
@@ -114,7 +114,6 @@
                             // check if the same row
 
                             if (Math.floor(lastSquare/this.x) == Math.floor(currSquare/this.x)){
-                                console.log("SAME ROW");
 
                                 let squares = [];
                                 for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i++){
@@ -125,7 +124,6 @@
                         }
                         // or the same column
                         else if (lastSquare%this.y == currSquare%this.y) {
-                            console.log("SAME COL");
                             //console.log(lastSquare, currSquare);
 
                             let squares = []
@@ -142,10 +140,38 @@
 
                     }
 
+                    let a = currentlyOver[0].getData('found');
+                    let b = currentlyOver[0].getData('board');
+                    console.log('found: ' + a + '  board: ' + b);
+
                 }, this);
 
+                this.input.on('pointerover', function(pointer, currentlyOver){
+                    currentlyOver[0].setTint(0xfff691);
 
+                });
 
+                this.input.on('pointerout', function(pointer, currentlyOver){
+                    //currentlyOver[0].setTint(0xfff691);
+                    let f = currentlyOver[0].getData('found');
+                    let b = currentlyOver[0].getData('board');
+                    if (f == 2) {
+                        //grey
+                        currentlyOver[0].setTint(0x828282);
+                    } else if (f==1) {
+                        if (b == 0) {
+                            //red
+                            currentlyOver[0].setTint(0xff0000);
+
+                        } else {
+                            //green 
+                            currentlyOver[0].setTint(0x05fa46);
+                        }
+ 
+                    } else {
+                        currentlyOver[0].clearTint();
+                    }
+                }, this);
 
 
 
@@ -200,7 +226,7 @@
                             for (let j = 0; j < this.y; j++) {
                                 if (this.player_board[i*this.x+j].getData('found') == 0){
                                     this.player_board[i*this.x+j].setTint(0x828282);
-                                    this.player_board[i*this.x+j].setData('found', 1);
+                                    this.player_board[i*this.x+j].setData('found', 2);
                                 }
                             }
                         }
@@ -223,7 +249,7 @@
                             for (let i = 0; i < this.x; i++) {
                                 if (this.player_board[i*this.x+j].getData('found') == 0){
                                     this.player_board[i*this.x+j].setTint(0x828282);
-                                    this.player_board[i*this.x+j].setData('found', 1);                                    
+                                    this.player_board[i*this.x+j].setData('found', 2);                                    
                                 }
                             }
                         }
@@ -256,13 +282,17 @@
                     let red_count = 0;
                     for (let i = 0; i < this.player_board.length; i++) {
                         if (this.player_board[i].getData('board') == 1) {
-                            green_count += this.player_board[i].getData('found');
+                            if (this.player_board[i].getData('found') == 1 ){
+                                green_count += 1;
+                            }
                         } else {
-                            red_count += this.player_board[i].getData('found');
+                            if (this.player_board[i].getData('found') == 1){
+                                red_count += 1;
+                            }
                         }
                     }
 
-                    console.log(this.registry.get('board_green'))
+                    //console.log(this.registry.get('board_green'))
 
                     if (this.registry.get('board_green') == this.board_green) {
                         // add found green and red to registry
@@ -280,7 +310,7 @@
             }
 
             /**
-             * Part of listener function, restarts scene.
+             * Listener function, restarts scene.
              */
             newGame()
             {
@@ -300,13 +330,15 @@
                 for (let i = 0; i < squares.length; i++) {
                     
                     let currSquare = this.player_board[squares[i]];
-                    if (currSquare.getData('found') == 0) {
+                    if (currSquare.getData('found') != 1) {
                         if (isGrey) {
-                            if (currSquare.isTinted) {
+                            if (currSquare.getData('found') == 2) {
                                 currSquare.clearTint();
+                                currSquare.setData('found', 0);
                             } else {
                                 // grey
                                 currSquare.setTint(0x828282);
+                                currSquare.setData('found', 2);
                             }
                         } else {
                             if (currSquare.getData('board') == 1) {

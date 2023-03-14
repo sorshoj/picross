@@ -16,7 +16,7 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 
 ### To Do
 - edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
-- use this.registry to share info inbetween scenes 
+- use this.registry to share info inbetween secnes 
 - add settings to change board size
 - add buttons/options for refreshing, resetting board, etc.
 - add an optional timer
@@ -27,9 +27,11 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 
 ### Open Issues
 - hitting the preload() whenever doing a new game may be reloading all assets into memory + still holding previous arrays, clues, all vars, etc. Could cause memory issues down the line --> not an issue ATM.
+- right clicking greyed squares that were automatically filled does not ungrey them - unintentional behaviour
 
 
 ### Completed
+- implemented drag select. Can now select multiple squares in the same row or column w/ left or right click [3/?]
 - make it pretty
 - fix y clues for large boards. clues are unreadable at 10x10 COMPLETED [1/24]
 - implement autofill - when all the squares in a row/col are found it is auto filled in with gray COMPLETED [1/19]
