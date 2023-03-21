@@ -27,10 +27,13 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 
 ### Open Issues
 - hitting the preload() whenever doing a new game may be reloading all assets into memory + still holding previous arrays, clues, all vars, etc. Could cause memory issues down the line --> not an issue ATM.
-- right clicking greyed squares that were automatically filled does not ungrey them - unintentional behaviour
+- right clicking greyed squares that were automatically filled does not ungrey them (unintentional behaviour)
+
 
 
 ### Completed
+- auto grey out squares function not working COMPLETED [3/20]
+- guidelines button color disappears COMPLETED [3/20]
 - implemented drag select. Can now select multiple squares in the same row or column w/ left or right click [3/?]
 - make it pretty
 - fix y clues for large boards. clues are unreadable at 10x10 COMPLETED [1/24]
@@ -42,4 +45,9 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 
 
 ### Reference
-- Blue Color on Buttons is 0x1023ED
+- Blue Color on Guidelines is 0x1023ED
+- Green Color on Buttons is 0x05fa46
+- Red Color on Buttons is 0xff0000
+- Grey Color is 0x828282
+
+
