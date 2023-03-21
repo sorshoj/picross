@@ -13,6 +13,7 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 - [1/19] changed board generation algorithm. progress in making entire doc more in line w/ JS best practices
 - [2/8] now hosting this project on Digital Ocean as a static page
 - [2/9] changed the visual assets, [2/10] added guidelines
+- [3/20] merged drag_select branch. Now has drag select functionality and mouse over highlighting.
 
 ### To Do
 - edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
