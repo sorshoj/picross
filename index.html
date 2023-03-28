@@ -6,10 +6,23 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
 </head>
 <body>
+    <style>
+        body {
+            background : black;
+        }
+    </style>
+        
+    </canvas>
+
 
     <script src="./helper.js"></script>
 
     <script>
+        const customCanvas = document.createElement('canvas');
+        //customCanvas.setAttribute('style', "position: absolute; margin:auto");
+        customCanvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:5px solid #1023ED";
+
+
         document.addEventListener("contextmenu", function (e){ 
                 e.preventDefault();
             }, false);
@@ -54,6 +67,7 @@
 
                 this.graphics = this.add.graphics();
                 this.graphics.setDepth(100);
+
             }
 
 
@@ -349,12 +363,16 @@
             width: 1000,
             height: 800,
             parent: 'phaser-example',
-            scene: [ GameScene, EndScene, InfoScene]
+            scene: [ GameScene, EndScene, InfoScene],
+            canvas: customCanvas
         };
 
         var game = new Phaser.Game(config);
+
+        
                 
     </script>
+
 
 
 </body>
