@@ -5,7 +5,7 @@
  * Draws blue guidelines & toggle button on canvas
  * @param context
  */
-var draw_guidelines = function(context)
+var drawGuidelines = function(context)
 {
     let square_length = context.square_length;
     let margin = context.margin;
@@ -22,7 +22,7 @@ var draw_guidelines = function(context)
     // creating button
     context.guideline_butt = context.add.image(750,255, 'square').setOrigin(0,0).setInteractive();
     context.guideline_butt.setTint(0x1023ED);
-    context.add.text(805, 275, 'Toggle Guidelines');
+    context.add.text(805, 270, 'Toggle Guidelines', {font : '20px Arial'});
     context.guideline_butt.on('pointerdown', listenerGuidelines, context);
     context.guideline_butt.setTint(0x1023ED);
 };
@@ -42,6 +42,73 @@ var listenerGuidelines = function(){
         this.registry.set('guidelines', 0);
         this.graphics.setAlpha(0.0);
         this.guideline_butt.clearTint();
+    }
+    return;
+}
+
+var drawClues = function(context){
+    // add xclues to screen
+    // offset from the font size
+    let margin = context.margin;
+    let square_length = context.square_length;
+    let ypos = margin + (square_length/2 - 10);
+    let xpos = margin / 3;
+    for (let i = 0; i < context.xclues.length; i++) {
+        context.add.text(xpos, ypos, "" + context.xclues[i], {font : '20px Arial'});
+        ypos += square_length;
+    }
+
+    // add yclues to screen
+    xpos = margin + (square_length/2 - 5);
+    for (let i = 0; i < context.yclues.length; i++) {
+        ypos = margin / 3;
+        for (let j = 0; j < context.yclues[i].length; j++){
+            context.add.text(xpos, ypos, "" + context.yclues[i][j], {font: '20px Arial'});
+            ypos+=20;
+        }
+        xpos += square_length;
+    }
+    return;
+}
+
+/**
+ * Helper function. Sets all given squares to appropriate color. 
+ * Changes 'found' data of selected squares.
+ * @TODO might be able to eliminate found = 2
+ * Changes 'color' data of selected squares
+ * @param {array} squares - array of indexes
+ * @param {boolean} isGrey - true: set to grey, false: set to red|green
+ */
+var setAllTint = function(squares, isGrey, context){
+    for (let i = 0; i < squares.length; i++) {
+        let currSquare = context.player_board[squares[i]];
+        if (currSquare.getData('found') != 1) {
+            if (isGrey) {
+                if (currSquare.getData('found') == 2) {
+                    currSquare.clearTint();
+                    currSquare.setData('found', 0);
+                    currSquare.setData('color', 0);
+                } else {
+                    // grey
+                    currSquare.setTint(0x828282);
+                    currSquare.setData('found', 2);
+                    currSquare.setData('color', 0x828282);
+                }
+            } else {
+                if (currSquare.getData('board') == 1) {
+                    // green
+                    currSquare.setTint(0x05fa46);
+                    currSquare.setData('color', 0x05fa46);
+                    context.registry.set('board_green', context.registry.get('board_green')+1);
+                } else {
+                    // red
+                    currSquare.setTint(0xff0000);
+                    currSquare.setData('color', 0xff0000);
+                    context.registry.set('player_red', context.registry.get('player_red')+1);
+                }
+                currSquare.setData('found', 1);
+            }
+        }
     }
     return;
 }
@@ -134,7 +201,7 @@ var boardGeneration = function(x, y) {
         previous_row = current_row;
     }
 
-    console.log(temp_board.toString());
+    //console.log(temp_board.toString());
 
     // TODO what other assertions can be made?
 

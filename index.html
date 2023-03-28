@@ -47,6 +47,7 @@
                 this.registry.set('lastSquare', -1);
                 this.registry.set('board_green', 0);
                 this.registry.set('player_red', 0);
+                this.registry.set('time_start', Date.now());
                 
                 this.player_green = 0;
                 this.player_board = new Array(this.x*this.y);
@@ -87,7 +88,6 @@
 
                 // PLAYER INPUT
                 this.input.on('pointerdown', function(pointer, currentlyOver) {
-                    
                     if (currentlyOver.length == 0) {
                         this.registry.set('lastSquare', -1);
 
@@ -112,26 +112,22 @@
                         // either the same row
                         if (Math.abs(lastSquare-currSquare) <= 9){
                             // check if the same row
-
                             if (Math.floor(lastSquare/this.x) == Math.floor(currSquare/this.x)){
-
                                 let squares = [];
                                 for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i++){
                                     squares.push(i);
                                 }
-                                this.setAllTint(squares, pointer.rightButtonDown());
+                                setAllTint(squares, pointer.rightButtonDown(), this);
                             }
                         }
                         // or the same column
                         else if (lastSquare%this.y == currSquare%this.y) {
-
                             let squares = []
                             for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i+=this.x){
 
                                 squares.push(i);
                             }
-
-                            this.setAllTint(squares, pointer.rightButtonDown());
+                            setAllTint(squares, pointer.rightButtonDown(), this);
                         }
                         else {
                             console.log("NO MATCH");
@@ -162,34 +158,12 @@
                     return;
                 }, this);
 
+                drawClues(this);
 
-
-                // add xclues to screen
-                // offset from the font size
-                let ypos = margin + (square_length/2 - 10);
-                let xpos = margin / 3;
-                for (let i = 0; i < this.xclues.length; i++) {
-                    this.add.text(xpos, ypos, "" + this.xclues[i], {font : '20px Arial'});
-                    ypos += square_length;
-                }
-
-                // add yclues to screen
-                xpos = margin + (square_length/2 - 5);
-                for (let i = 0; i < this.yclues.length; i++) {
-                    ypos = margin / 3;
-                    for (let j = 0; j < this.yclues[i].length; j++){
-                        this.add.text(xpos, ypos, "" + this.yclues[i][j], {font: '20px Arial'});
-                        ypos+=20;
-                    }
-                    xpos += square_length;
-                }
-
-
-                draw_guidelines(this);
+                drawGuidelines(this);
                 
-
                 // restart button
-                let newgame_butt = this.add.image(config.width/2, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
+                let newgame_butt = this.add.image(margin+5*square_length-62.5, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerup', this.newGame, this);
 
                 
@@ -266,7 +240,7 @@
                  * @TODO can definitely move green_count to be a global variable
                  * @TODO accuracy is wrong now
                  */
-                this.input.on('pointerup', function() {
+                this.input.on('pointerup', function(){
 
                     // count the number of found green squares & compare
                     let green_count = 0;
@@ -301,59 +275,12 @@
             /**
              * Listener function, restarts scene.
              */
-            newGame()
-            {
+            newGame(){
                 console.log('new game');
                 this.scene.restart();
                 return;
             }
-
-            /**
-             * Helper function. Sets all given squares to appropriate color. 
-             * Changes 'found' data of selected squares.
-             * @TODO might be able to eliminate found = 2
-             * Changes 'color' data of selected squares
-             * @param {array} squares - array of indexes
-             * @param {boolean} isGrey - true: set to grey, false: set to red|green
-             */
-            setAllTint(squares, isGrey)
-            {
-                for (let i = 0; i < squares.length; i++) {
-                    
-                    let currSquare = this.player_board[squares[i]];
-                    if (currSquare.getData('found') != 1) {
-                        if (isGrey) {
-                            if (currSquare.getData('found') == 2) {
-                                currSquare.clearTint();
-                                currSquare.setData('found', 0);
-                                currSquare.setData('color', 0);
-                            } else {
-                                // grey
-                                currSquare.setTint(0x828282);
-                                currSquare.setData('found', 2);
-                                currSquare.setData('color', 0x828282);
-                            }
-                        } else {
-                            if (currSquare.getData('board') == 1) {
-                                // green
-                                currSquare.setTint(0x05fa46);
-                                currSquare.setData('color', 0x05fa46);
-                                this.registry.set('board_green', this.registry.get('board_green')+1);
-                            } else {
-                                // red
-                                currSquare.setTint(0xff0000);
-                                currSquare.setData('color', 0xff0000);
-                                this.registry.set('player_red', this.registry.get('player_red')+1);
-                            }
-                            currSquare.setData('found', 1);
-                        }
-                    }
-                }
-                return;
-            }
-
         }
-
 
 
 
@@ -376,13 +303,18 @@
                 this.add.image(100, 100, 'endscene').setOrigin(0,0).setAlpha(0.85);
 
                 // new game button
-                let newgame_butt = this.add.image(config.width/2, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
+                let newgame_butt = this.add.image(337.5, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
                 newgame_butt.on('pointerdown', this.newgame, this);
                 
                 // display accuracy statistic
                 let board_green = this.registry.get('board_green');
                 let player_red = this.registry.get('player_red');
-                this.add.text(200, config.height-75, "Accuracy: " + Math.round(board_green/(player_red+board_green)*10000)/100 + "%");
+                this.add.text(150, config.height-100, "Accuracy: " + Math.round(board_green/(player_red+board_green)*10000)/100 + "%", {font : '20px Arial'});
+
+                let time = Math.floor((Date.now() - this.registry.get('time_start')) / 1000);
+                let minutes = Math.floor(time/60);
+                let seconds = time % 60;
+                this.add.text(150, config.height-75, "Time: " + minutes + ":" + seconds, {font : '20px Arial'});
             }
     
             newgame ()
@@ -391,11 +323,6 @@
                 this.scene.start("GameScene");
             }
         }
-
-
-
-
-
 
 
         class InfoScene extends Phaser.Scene {

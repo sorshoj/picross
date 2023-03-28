@@ -14,14 +14,11 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 - [2/8] now hosting this project on Digital Ocean as a static page
 - [2/9] changed the visual assets, [2/10] added guidelines
 - [3/20] merged drag_select branch. Now has drag select functionality and mouse over highlighting.
+0 [3/27] added timer
 
 ### To Do
 - edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
-- use this.registry to share info inbetween secnes 
 - add settings to change board size
-- add buttons/options for refreshing, resetting board, etc.
-- add an optional timer
-- add end of game statistics
 - decide on the rules 
     - chill mode : no penalty for wrong guesses, doesnt count mistakes [11/16] for now, implementing this mode
     - will also need to algorithmically decide on multiple solutions/make boards with only 1 solution?
@@ -31,8 +28,11 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 - right clicking greyed squares that were automatically filled does not ungrey them (unintentional behaviour)
 
 
-
 ### Completed
+- add end of game statistics
+- add buttons/options for refreshing, resetting board, etc.
+- use this.registry to share info inbetween secnes 
+- add an optional timer
 - auto grey out squares function not working COMPLETED [3/20]
 - guidelines button color disappears COMPLETED [3/20]
 - implemented drag select. Can now select multiple squares in the same row or column w/ left or right click [3/?]
