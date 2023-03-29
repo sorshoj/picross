@@ -3,17 +3,44 @@
 <title>picross</title>
 
 <head>
+    <meta charset="utf-8"/>
+    <meta name="description" content="A personal project implementation of the game picross :)"/>
+    <link rel="icon" href="assets/icon.png" type="image/x-icon"/>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
 </head>
 <body>
     <style>
         body {
-            background : black;
+            background : white;
+        }
+        ul {
+            color: white;
+            list-style-type:  none;
+            display:  flex;
+            gap:  1.9 rem;
+
+        }
+        nav {
+            background:  pink;
+            color:  white;
+            align-items:  center;
+            justify-content: space-between;
+            padding:  1.5 rem, 3.0 rem;
+            z-index:  1;
+            display: flex;
         }
     </style>
-        
-    </canvas>
+    <!--comment style-->
 
+    <nav>
+        <ul>
+            <li><a href="https://www.google.com/" title="Go to Google" target="_blank">test1</a></li>
+            <li>test2</li>
+        </ul>
+
+    </nav>
+
+        
 
     <script src="./helper.js"></script>
 
