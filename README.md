@@ -19,9 +19,7 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 ### To Do
 - edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
 - add settings to change board size
-- decide on the rules 
-    - chill mode : no penalty for wrong guesses, doesnt count mistakes [11/16] for now, implementing this mode
-    - will also need to algorithmically decide on multiple solutions/make boards with only 1 solution?
+- potentially move buttons (info, new game, toggles) to outside the game board? requires moving elements out of js
 
 ### Open Issues
 - hitting the preload() whenever doing a new game may be reloading all assets into memory + still holding previous arrays, clues, all vars, etc. Could cause memory issues down the line --> not an issue ATM.
@@ -44,6 +42,9 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 - need a create an ending screen / end state. need to create the conditions for ending (i.e. every square is filled in or all squares have been found) COMPLETED [12/29]
 - [11/16] want to find a better solution. numpy arrays clash with player intuitive indexing. [12/12] using different language, no longer issue
 - make interactive, players need to input guesses [11/16] implement way for players to input a range of guesses that are all either blank/square [12/12] COMPLETED
+- decide on the rules [COMPLETED - disregarded]
+    - chill mode : no penalty for wrong guesses, doesnt count mistakes [11/16] for now, implementing this mode
+    - will also need to algorithmically decide on multiple solutions/make boards with only 1 solution?
 
 
 ### Reference

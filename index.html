@@ -188,7 +188,7 @@
                 
                 // restart button
                 let newgame_butt = this.add.image(margin+5*square_length-62.5, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
-                newgame_butt.on('pointerup', this.newGame, this);
+                newgame_butt.on('pointerdown', this.newGame, this);
 
                 
                 // clue helper algo (auto greys out when row/col completes)
