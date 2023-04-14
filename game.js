@@ -4,14 +4,10 @@
  * need to divide to make more readable in future.
  */
 
-const customCanvas = document.createElement('canvas');
-//customCanvas.setAttribute('style', "position: absolute; margin:auto");
-customCanvas.style = "top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:5px solid #1023ED";
+//const customCanvas = document.createElement('canvas');
+//customCanvas.style = "top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:5px solid #212529";
 
 
-document.addEventListener("contextmenu", function (e){ 
-        e.preventDefault();
-    }, false);
 
 class GameScene extends Phaser.Scene {
     constructor ()
@@ -283,14 +279,17 @@ class GameScene extends Phaser.Scene {
 }
         
 
-
 var config = {
     type: Phaser.AUTO,
     width: 1000,
     height: 800,
     parent: 'phaser-example',
     scene: [ GameScene, EndScene, InfoScene],
-    canvas: canvas2
+    //transparent: true,
+    backgroundColor: 0x212529,
+    canvas: this.canvas2,
+    parent:"picross-canvas",
+    disableContextMenu: true,
 };
 
 var game = new Phaser.Game(config);
