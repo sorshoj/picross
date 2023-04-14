@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 992px) {
+        .rounded-lg-3 { border-radius: .3rem; }
+        
+        }   
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 1.5rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+    </style>
+
+  </head>
+
+
+  <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+
+  <symbol id="chevron-right" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+  </symbol>
+
+</svg>
+
+<main>
+
+<!-- Hero Section -->
+  <div class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h1 class="display-5 fw-bold text-white">Sora J. Shojaie</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="fs-5 mb-4">Summary of my experience and what I'm looking for next</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+
+        <!-- Social Links -->
+        <!-- TODO put into a flex box for mobile/squished -->
+
+          <a class="icon-link" href="https://www.linkedin.com/in/sora-shojaie-8429b9261/" target="_blank">
+            <img src="/assets/linkedin.png" alt="LinkedIn" width="50" height="50">
+          </a>
+
+          <a class="icon-link" href="https://github.com/sorshoj" target="_blank">
+            <img src="/assets/github.png" alt="GitHub" width="50" height="50">
+          </a>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="b-example-divider mb-0"></div>
+
+<!-- End Hero Section -->
+
+<!-- Experience Section -->
+  <div class="container px-4 py-5">
+    <h2 class="pb-2 border-bottom">Experience & Projects</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+      <div class="col d-flex flex-column align-items-start gap-2">
+        <h3 class="fw-bold">Technical Intern @ Intel Corporation</h3>
+        <p class="text-body-secondary">Worked in Intel's Client Memory Division for 8 months automating power & performance tests for solid state drives.Automated software (ex. Crystal Disk Mark, PCMark 10) with Python 2.7 scripts and regularly debugged user support requests. </p>
+      </div>
+
+
+      <div class="col">
+        <div class="row row-cols-1 row-cols-sm-2 g-4">
+          <div class="col d-flex flex-column gap-2">
+
+            <h4 class="fw-semibold mb-0">Picross</h4>
+            <p class="text-body-secondary">Personal project, include a link to</p>
+
+             <a href="#" class="icon-link">
+              Link to project
+              <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+             </a>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            
+            <h4 class="fw-semibold mb-0">Spam/Ham Classifier</h4>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+           
+            <h4 class="fw-semibold mb-0">Digit Neural Net Classifier</h4>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+           
+            <h4 class="fw-semibold mb-0">Interactive Game</h4>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="b-example-divider mb-0"></div>
+
+<!-- End of Experience Section -->
+
+
+<!-- Education -->
+  
+
+
+  <div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Education</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3 gap-2">
+      
+      <div class="col d-flex align-items-start flex-fill">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <img src="assets/ucb.png" height="50" width="50">
+
+        </div>
+        <div>
+          <h3 class="fs-2">Berkeley</h3>
+          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          
+        </div>
+      </div>
+
+
+      <div class="col d-flex align-items-start flex-fill">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <img src="assets/ucb.png" height="50" width="50">
+
+        </div>
+        <div>
+          <h3 class="fs-2">Vista</h3>
+          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          
+        </div>
+      </div>
+      
+      
+
+
+<!-- End of Education Section -->
+
+
+</main>
+
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+      
+  </body>
+</html>
