@@ -1,380 +1,294 @@
 <!DOCTYPE html>
-<html>
-<title>Picross</title>
+<html lang="en" data-bs-theme="auto">
+<title>Sora Shojaie</title>
 
-<head>
-    <link rel="icon" href="assets/icon.png"/>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
-</head>
-<body>
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background : black;
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 992px) {
+        .rounded-lg-3 { border-radius: .3rem; }
+        
+        }   
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
         }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 1.5rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
     </style>
-        
-    </canvas>
+
+  </head>
+
+  <body>
+
+  <!-- Symbol Definitions-->
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="chevron-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+    </symbol>
+    <symbol id="hdd" viewBox="0 0 16 16">
+      <path d="M4.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+      <path d="M16 11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9.51c0-.418.105-.83.305-1.197l2.472-4.531A1.5 1.5 0 0 1 4.094 3h7.812a1.5 1.5 0 0 1 1.317.782l2.472 4.53c.2.368.305.78.305 1.198V11zM3.655 4.26 1.592 8.043C1.724 8.014 1.86 8 2 8h12c.14 0 .276.014.408.042L12.345 4.26a.5.5 0 0 0-.439-.26H4.094a.5.5 0 0 0-.44.26zM1 10v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+    </symbol>
+    <symbol id="book" viewBox="0 0 16 16">
+      <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+    </symbol>
+    <symbol id="github" viewBox="0 0 16 16">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+    </symbol>
+    <symbol id='linkedin' viewBox="0 0 16 16">
+      <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+    </symbol>
+</svg>
 
 
-    <script src="./helper.js"></script>
+<main>
 
-    <script>
-        const customCanvas = document.createElement('canvas');
-        //customCanvas.setAttribute('style', "position: absolute; margin:auto");
-        customCanvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:5px solid #1023ED";
+<!-- Hero Section -->
+  <div class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h1 class="display-5 fw-bold text-white">Sora J. Shojaie</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="fs-5 mb-4">A UC Berkeley graduate currently looking for work as a software engineer. </p>
+        <div class="gap-2 d-flex justify-content-center">
 
+        <!-- Social Links -->
+        <!-- TODO turn these into symbols -->
+        <div>
+          <a href="https://www.linkedin.com/in/sora-shojaie-8429b9261/" target="_blank"><svg class="bi" fill="currentColor" width="40" height="40"><use xlink:href="#linkedin"/></svg></a>
+        </div>
+        <div>
+          <a  href="https://github.com/sorshoj" target="_blank"><svg class="bi" fill="currentColor" width="40" height="40"><use xlink:href="#github"/></svg></a>
+        </div>
 
-        document.addEventListener("contextmenu", function (e){ 
-                e.preventDefault();
-            }, false);
-
-        class GameScene extends Phaser.Scene {
-            constructor ()
-            {
-                super('GameScene');
-                console.log('hit the constructor');
-
-            }
-
-            preload ()
-            {
-                // TODO move these loads to a different scene
-                // these are reloaded every new game
-
-                this.load.image('square', 'assets/square_v2.png');
-                this.load.image('newgame', 'assets/newgame_v2.png');
-                this.load.image('infobutton', 'assets/info_button_v2.png');
-                console.log('hit the preload');
-                this.load.image('select', 'assets/temp.png');
-
-                // RESET VARIABLES FOR NEW GAME
-                this.x = 10;
-                this.y = 10;
-                this.margin = 150;
-                this.square_length = 50;
-                let a = boardGeneration(this.x, this.y);
-                this.xclues = a[0];
-                this.yclues = a[1];
-                this.Board = a[2];
-                this.board_green = a[3];
-                
-                this.registry.set('lastSquare', -1);
-                this.registry.set('board_green', 0);
-                this.registry.set('player_red', 0);
-                this.registry.set('time_start', Date.now());
-                
-                this.player_green = 0;
-                this.player_board = new Array(this.x*this.y);
-
-                this.graphics = this.add.graphics();
-                this.graphics.setDepth(100);
-
-            }
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-            create ()
-            {                
-                let start_x = 0;
-                let start_y = 0;
-                let square_length = this.square_length;
-                let margin = this.margin;
-                let x = this.x;
-                let y = this.y;
-                let mod_val = (square_length*x);
 
-                // create interactive image array
-                // & click function
-                for (let i = 0; i < this.Board.length; i++) {
-                    let tent = this.add.image(start_x+margin, start_y+margin, 'square').setOrigin(0,0).setInteractive();
-                    
-                    tent.setData('index', i);
-                    tent.setData('board', this.Board[i]);
-                    tent.setData('found', 0);
-                    tent.setData('color', 0);
+<!-- Experience Section -->
+
+  <div class="container px-4 py-5">
+    <h2 class="pb-2 border-bottom">Work Experience</h2>
     
-                    this.player_board[i] = tent;
-                    start_x = (start_x + square_length) % mod_val;
-                    if (start_x == 0){
-                        start_y = start_y + square_length;
-                    }
-
-                }
-
-
-                // PLAYER INPUT
-                this.input.on('pointerdown', function(pointer, currentlyOver) {
-                    if (currentlyOver.length == 0) {
-                        this.registry.set('lastSquare', -1);
-
-                    } else {
-                        let index1 = currentlyOver[0].getData('index')
-                        this.registry.set('lastSquare', index1);
-                    }
-                }, this);
-
-
-                // TODO can make this more efficient
-                this.input.on('pointerup', function(pointer, currentlyOver) {
-                    if (currentlyOver.length == 0) {
-                        return;
-                    }
-                    let currSquare = currentlyOver[0].getData('index')
-                    let lastSquare = this.registry.get('lastSquare');
-
-                    // case : same square ? 
-
-                    if (lastSquare >= 0){
-                        // either the same row
-                        if (Math.abs(lastSquare-currSquare) <= 9){
-                            // check if the same row
-                            if (Math.floor(lastSquare/this.x) == Math.floor(currSquare/this.x)){
-                                let squares = [];
-                                for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i++){
-                                    squares.push(i);
-                                }
-                                setAllTint(squares, pointer.rightButtonDown(), this);
-                            }
-                        }
-                        // or the same column
-                        else if (lastSquare%this.y == currSquare%this.y) {
-                            let squares = []
-                            for (let i = Math.min(lastSquare, currSquare); i <= Math.max(lastSquare, currSquare); i+=this.x){
-
-                                squares.push(i);
-                            }
-                            setAllTint(squares, pointer.rightButtonDown(), this);
-                        }
-                        else {
-                            console.log("NO MATCH");
-                        }
-
-                    }
-                }, this);
-
-
-
-                // Highlight game squares that are moused over
-                this.input.on('pointerover', function(pointer, currentlyOver){
-                    // check if object is game board square
-                    if (currentlyOver[0].getData('index')){
-                        currentlyOver[0].setTint(0xfff691);
-                    }
-                    return;
-                });
-
-                // Resets the previous color of the square, if any
-                this.input.on('pointerout', function(pointer, currentlyOver){
-                    let color = currentlyOver[0].getData('color');
-                    if (color == 0) {
-                        currentlyOver[0].clearTint();
-                    } else if (color) {
-                        currentlyOver[0].setTint(color);
-                    }
-                    return;
-                }, this);
-
-                drawClues(this);
-
-                drawGuidelines(this);
-                
-                // restart button
-                let newgame_butt = this.add.image(margin+5*square_length-62.5, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
-                newgame_butt.on('pointerup', this.newGame, this);
-
-                
-                // clue helper algo (auto greys out when row/col completes)
-                // TODO make optional in settings
-                // TODO can make more efficient?
-
-                this.input.on('pointerup', function() {
-                    // check rows
-                    for (let i = 0; i < this.x; i++) {
-                        let all_green = 0;
-                        let found_green = 0;
-                        for (let j = 0; j < this.y; j++) {
-                            if (this.Board[i*this.x + j] == 1) {
-                                all_green += 1;
-                                if (this.player_board[i*this.x + j].getData('found') == 1){
-                                    found_green += 1;
-                                }
-                            }
-                        }
-                        // all green in row has been found
-                        if (all_green == found_green) {
-                            for (let j = 0; j < this.y; j++) {
-                                if (this.player_board[i*this.x+j].getData('found') == 0){
-                                    this.player_board[i*this.x+j].setTint(0x828282);
-                                    this.player_board[i*this.x+j].setData('found', 2);
-                                    this.player_board[i*this.x+j].setData('color', 0x828282);
-                                }
-                            }
-                        }
-                    }
-
-                    // check columns
-                    for (let j = 0; j < this.y; j++) {
-                        let all_green = 0;
-                        let found_green = 0;
-                        for (let i = 0; i < this.x; i++) {
-                            if (this.Board[i*this.x + j] == 1) {
-                                all_green += 1;
-                                if (this.player_board[i*this.x + j].getData('found') == 1){
-                                    found_green += 1;
-                                }
-                            }
-                        }
-                        // all green in row has been found
-                        if (all_green == found_green) {
-                            for (let i = 0; i < this.x; i++) {
-                                if (this.player_board[i*this.x+j].getData('found') == 0){
-                                    this.player_board[i*this.x+j].setTint(0x828282);
-                                    this.player_board[i*this.x+j].setData('found', 2);
-                                    this.player_board[i*this.x+j].setData('color', 0x828282);                                    
-                                }
-                            }
-                        }
-                    }
-
-                }, this);  
-                
-                // info button
-                let info_butt = this.add.image(config.width-100,config.height-100, 'infobutton').setOrigin(0,0).setInteractive();
-                info_butt.on('pointerdown', function (pointer) {
-                    this.scene.pause();
-                    this.scene.run('InfoScene');
-                }, this);
-
-
-                /**
-                 * End Scene Listener
-                 * Counts the number of found green squares.
-                 * Ends game scene if found equals total.
-                 * Adds green and red count to registry for statistics.
-                 * 
-                 * @TODO can change to a game object listener instead of pointer?
-                 * @TODO can definitely move green_count to be a global variable
-                 * @TODO accuracy is wrong now
-                 */
-                this.input.on('pointerup', function(){
-
-                    // count the number of found green squares & compare
-                    let green_count = 0;
-                    let red_count = 0;
-                    for (let i = 0; i < this.player_board.length; i++) {
-                        if (this.player_board[i].getData('board') == 1) {
-                            if (this.player_board[i].getData('found') == 1 ){
-                                green_count += 1;
-                            }
-                        } else {
-                            if (this.player_board[i].getData('found') == 1){
-                                red_count += 1;
-                            }
-                        }
-                    }
-
-                    if (this.registry.get('board_green') == this.board_green) {
-                        // add found green and red to registry
-                        //this.registry.set('board_green', this.board_green);
-                        //this.registry.set('player_red', red_count);
-                        
-                        // end the game scene
-                        this.scene.pause();
-                        newgame_butt.setVisible(0);
-                        this.scene.run('EndScene');
-                    }
-                }, this);
-
-
-            }
-
-            /**
-             * Listener function, restarts scene.
-             */
-            newGame(){
-                console.log('new game');
-                this.scene.restart();
-                return;
-            }
-        }
-
-
-
-
-
-
-
-        class EndScene extends Phaser.Scene {
-            constructor ()
-            {
-                super('EndScene');
-            }
-            preload() 
-            {
-                this.load.image('endscene', 'assets/endscene_v2.png');                
-            }
-
-            create ()
-            {
-                this.add.image(100, 100, 'endscene').setOrigin(0,0).setAlpha(0.85);
-
-                // new game button
-                let newgame_butt = this.add.image(337.5, config.height-100, 'newgame').setOrigin(0,0).setInteractive();
-                newgame_butt.on('pointerdown', this.newgame, this);
-                
-                // display accuracy statistic
-                let board_green = this.registry.get('board_green');
-                let player_red = this.registry.get('player_red');
-                this.add.text(150, config.height-100, "Accuracy: " + Math.round(board_green/(player_red+board_green)*10000)/100 + "%", {font : '20px Arial'});
-
-                let time = Math.floor((Date.now() - this.registry.get('time_start')) / 1000);
-                let minutes = Math.floor(time/60);
-                let seconds = time % 60;
-                this.add.text(150, config.height-75, "Time: " + minutes + ":" + seconds, {font : '20px Arial'});
-            }
-    
-            newgame ()
-            {
-                console.log('new game');
-                this.scene.start("GameScene");
-            }
-        }
-
-
-        class InfoScene extends Phaser.Scene {
-            constructor ()
-            {
-                super('InfoScene');
-            }
-            preload () {
-                this.load.image('info', 'assets/infoscene_v2.png');
-            }
-            create () {
-                this.add.image(100, 100, 'info').setOrigin(0,0).setAlpha(0.90);
-                this.input.once('pointerdown', this.disappear, this);
-            }
-            disappear () {
-                this.scene.stop();
-                this.scene.resume("GameScene");
-            }
-        }        
-
-
-        var config = {
-            type: Phaser.AUTO,
-            width: 1000,
-            height: 800,
-            parent: 'phaser-example',
-            scene: [ GameScene, EndScene, InfoScene],
-            canvas: customCanvas
-        };
-
-        var game = new Phaser.Game(config);
-
+    <div class="row py-3">
+      <div class="col d-flex align-items-start flex-fill">
         
+        <div class="icon-square d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="50" height="50"><use xlink:href="#hdd"/></svg> 
+        </div>
+        
+        <div class="m-0 p-0">
+          <div class="col d-flex flex-fill align-items-start text-wrap">
+            <div class="p-2 flex-fill"><h3 class="fw-bold">Technical Intern @ Intel Corporation</h3></div>
+            <div class="p-2 flex-shrink-0"><h4 class="fw-bold">Jan - Aug 2021</h4></div>
+          </div>
+
+          <p class="px-2 margin-bottom-0 text-body-secondary">Worked in Intel's Client Memory Division for 8 months automating power & performance tests for solid state drives. Automated software (ex. Crystal Disk Mark, PCMark 10) with Python 2.7 scripts and regularly debugged user support requests.</p>
+
+          <div class="col d-flex flex-fill justify-content-start ">
+            <ul class="text-body-secondary text-wrap px-auto">
+              <li>Developed new automated test suites</li>
+              <li>Created tools to analyze text & JSON files</li>
+              <li>Resolved JIRA support ticket requests</li>
+              <li>Supervised & mentored junior interns</li>
+            </ul>
+            <ul class="text-body-secondary text-wrap px-auto">
+              <li>Consulted on software projects for other teams</li>
+              <li>Produced code documentation</li>
+              <li>Recognized 2 times for contributions</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- Projects -->
+
+  <div class="container px-4">
+    <h2 class="pb-2 border-bottom">Projects</h2>
+
+      <div class="row d-flex flex-column align-items-center justify-content-center">
+
+
+
+      <div class="col d-flex justify-content-center pt-3">
+
+        <div class="d-flex h-100 p-1 bg-body-tertiary border rounded-3 col-md-6">
+
+          <div class="col d-flex my-3 align-items-center mx-2">
+            
+              <div class="row d-flex mx-auto">
+                <div><h4 class="fw-semibold mb-0">Picross</h4></div>
+                <div><p class="text-body-secondary">Created a web game modeled after the popular game Picross. Built using JavaScript & Phaser 3.</p></div>
                 
-    </script>
+                <div><a href="/picross.html" class="icon-link" target="_blank">
+                  Link to project <svg class="bi"><use xlink:href="#chevron-right"/></svg></a></div>
+              </div>
+            
+            <img src="assets/demo.gif" height="200" width="200">
+
+          </div>          
+        </div>
+
+      </div>
 
 
 
-</body>
+      <!-- Three Block Section -->
+      <div class="row row-cols-1 row-cols-sm-3 g-4">
+
+        <div class="col d-flex flex-column gap-2">
+          <h4 class="fw-semibold mb-0">Spam/Ham Classifier</h4>
+          <p class="text-body-secondary">Built a logistic regression model to classify spam emails from raw text data in Python using NumPy, pandas, & seaborn packages.</p>
+        </div>
+
+        <div class="col d-flex flex-column gap-2">               
+          <h4 class="fw-semibold mb-0">Digit Neural Net Classifier</h4>
+          <p class="text-body-secondary">Wrote, trained, and tested a multi-layer perceptron model that classified images of handwritten digits from the MNIST dataset in Python.</p>
+        </div>
+
+        <div class="col d-flex flex-column gap-2">               
+          <h4 class="fw-semibold mb-0">Interactive Game</h4>
+          <p class="text-body-secondary">Collaborated with a partner to create a game in Java. Designed the UI and used the StdDraw Java library for rendering.</p>
+        </div>
+
+      </div>
+      <!-- End Three Block Section -->
+
+      </div>
+    </div>
+  </div>
+
+
+<!-- Education -->
+  
+
+  <div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Education</h2>
+
+    <div class="col py-3 text-wrap">
+      
+      <div id="berkeley" class="col d-flex align-items-start justify-content-start">
+        <div class="icon-square d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="50" height="50"><use xlink:href="#book"/></svg>
+        </div>
+
+        <div class="row d-flex flex-fill">
+          <div class="col d-flex align-items-start text-wrap">
+            <div class="p-2 flex-fill">
+              <h3 class="fw-bold">University of California, Berkeley</h3>
+              <p class="m-0 text-body-secondary text-wrap">BA Data Science</p>
+              <ul class="m-top-0 text-body-secondary text-wrap">
+              </ul>
+
+            </div>
+            <div class="p-2"><h4 class="fw-bold">2018-2022</h4></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="highschool"class="col d-flex align-items-start justify-content-start">
+        <div class="icon-square d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="50" height="50"><use xlink:href="#book"/></svg>
+        </div>
+
+        <div class="row d-flex flex-fill">
+          <div class="col d-flex align-items-start text-wrap">
+            <div class="p-2 flex-fill">
+              <h3 class="fw-bold">Vista del Lago High School</h3>
+              
+            </div>
+            <div class="p-2"><h4 class="fw-bold">2014-2018</h4></div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+<!-- End of Education Section -->
+
+
+</main>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
