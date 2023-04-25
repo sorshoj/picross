@@ -1,6 +1,9 @@
 # Picross
 
-Static Site Here: https://picross-jzara.ondigitalocean.app/
+Static Site Here: https://picross-jzara.ondigitalocean.app/picross.html
+
+This is a personal project creating randomized playable picross games. New game will create a random new picross board and generate the necessary clues on the left and top of the board. There are 2 different types of user input, left and right click. Left click will make 'guess', which counts towards the end game score. Right click will mark the square grey, right clicking again will revert the square color. 
+This repo also contains the js and html for my personal website. 
 
 ### Progress So Far
 - board creation (with eventual customisable board sizes)
@@ -14,8 +17,9 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/
 - [2/8] now hosting this project on Digital Ocean as a static page
 - [2/9] changed the visual assets, [2/10] added guidelines
 - [3/20] merged drag_select branch. Now has drag select functionality and mouse over highlighting.
-0 [3/27] added timer
-
+- [3/27] added timer
+- [4/] added js, html for personal site
+ 
 ### To Do
 - edge case --> rows with 0 auto fill with grey after the first click (what is expected response here?)
 - add settings to change board size
