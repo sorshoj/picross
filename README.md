@@ -4,6 +4,7 @@ Static Site Here: https://picross-jzara.ondigitalocean.app/picross.html
 
 This is a personal project creating randomized playable picross games. New game will create a random new picross board and generate the necessary clues on the left and top of the board. There are 2 different types of user input, left and right click. Left click will make 'guess', which counts towards the end game score. Right click will mark the square grey, right clicking again will revert the square color. Right/Left click and hold to select multiple squares in the same row or column.
 This repo also contains the js and html for my personal website. 
+Updated with info & demo for task tracking project.
 
 ### Progress So Far
 - board creation (with eventual customisable board sizes)
